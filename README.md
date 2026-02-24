@@ -1,68 +1,44 @@
-# Mushroom Classification with Neural Networks
 
-## Project Overview
-This project explores whether mushrooms are edible or poisonous using a simple neural network built with **TensorFlow/Keras**.  
-I trained two versions of the model — one using raw one-hot encoded data and another using **PCA** for dimensionality reduction — to see how much efficiency could be gained without sacrificing accuracy.
+Mushroom Classification with Neural Networks & PCA
+A binary classification model that predicts whether a mushroom is edible or poisonous based on physical characteristics. Built with TensorFlow/Keras. The main goal was to see how much PCA could reduce the feature space without hurting accuracy — turns out, quite a bit.
+Tools
 
-## Tools & Libraries
-- Python (Pandas, NumPy)
-- Scikit-learn (PCA, preprocessing)
-- TensorFlow / Keras (neural network)
-- Matplotlib (visualization)
+Python (Pandas, NumPy)
+Scikit-learn (PCA, StandardScaler, preprocessing)
+TensorFlow / Keras
+Matplotlib
 
-## Data
-- Source: [UCI Mushroom Dataset](https://archive.ics.uci.edu/ml/datasets/mushroom)  
-- Features include cap shape, color, odor, gill size, and other visible traits.  
-- The target variable is binary: **edible (e)** or **poisonous (p)**.  
+Data
 
-## Approach
-1. Cleaned and organized the categorical data, then label-encoded and one-hot encoded features.  
-2. Built a basic feed-forward neural network on the one-hot encoded data.  
-3. Applied **Principal Component Analysis (PCA)** to reduce the feature space while keeping 95% of the variance.  
-4. Re-trained the same model architecture on the PCA data to compare accuracy, recall, precision, and training time.
+Source: UCI Mushroom Dataset
+8,124 samples, 22 categorical features (cap shape, odor, gill size, etc.)
+Target: edible (e) or poisonous (p)
 
-## Results
-**Baseline (One-Hot Encoded):** Accuracy **0.9994** | Precision **1.0000** | Recall **0.9987** | F1 **0.9994**  
-**PCA (95% Variance):** Accuracy **0.9988** | Precision **1.0000** | Recall **0.9974** | F1 **0.9987**
+Approach
 
-Both models performed almost perfectly. The PCA version trained slightly faster, showing that dimensionality reduction can improve efficiency without losing performance.
+One-hot encoded 22 categorical features → 116 binary columns
+Standardized features with StandardScaler (required before PCA)
+Built a feed-forward neural network — 16-neuron hidden layer with ReLU, sigmoid output
+Applied PCA to reduce 116 features down to 60 while retaining 95% of the variance
+Re-trained the same architecture on the reduced data to compare performance
 
-### Confusion Tables
-**Baseline (OHE)**
-```
-Predicted    0    1
-Actual             
-0          842    0
-1            1  782
-```
+Results
+ModelAccuracyPrecisionRecallF1Full features (116)99.94%100%99.87%99.94%PCA-reduced (60)99.88%100%99.74%99.87%
+Cut the feature space nearly in half, lost less than 0.1% accuracy. In a safety-critical context — where a false negative means someone eats a poisonous mushroom — both models performed well, but the full-feature model is the safer choice.
+Key Takeaways
 
-**PCA (95% var)**
-```
-Predicted    0    1
-Actual             
-0          842    0
-1            2  781
-```
+PCA combined 116 features into 60 new components while preserving 95% of the variance
+StandardScaler is essential before PCA — without it, results are misleading because PCA is sensitive to feature scale
+The tradeoff between efficiency and accuracy was minimal here, but with larger datasets the computational savings would matter more
 
-##  Takeaways
-- Solidified my understanding of end-to-end model building — from data cleaning to evaluation.  
-- PCA effectively cut the features in half (≈116 → 60) while maintaining 95% of the dataset’s variance.  
-- Reinforced practical experience with **TensorFlow/Keras**, **Scikit-learn**, and **Pandas** for applied machine learning.
+How to Run
 
-##  What’s Next
-- Experiment with deeper architectures or regularization for fine-tuning.  
-- Package the notebook into a script or lightweight Flask app.  
-- Try other dimensionality-reduction methods like t-SNE or UMAP for visualization and clustering.  
+Clone this repo
+Install dependencies:
 
-## How to Run
-1. Clone this repo.  
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Open the notebook and run the cells from top to bottom.
+bash   pip install -r requirements.txt
 
----
+Open the notebook and run cells top to bottom
 
-**Author:** Patrick Foran  
-**Contact:** [LinkedIn](https://www.linkedin.com/in/patrickmforan) · patrickmforan@gmail.com
+
+Patrick Foran — LinkedIn · patrickmforan@gmail.com
